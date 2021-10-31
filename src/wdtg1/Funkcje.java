@@ -105,7 +105,7 @@ public class Funkcje {
 
     static void wykonajPrzesuniecie(int tab[][], int gracz, int wersjaGry) {
         int ileMozliwosci = 0;
-        for (int x = 0; x < 9 - wersjaGry * 2; x++) {
+        for (int x = 0; x < 9 - (wersjaGry * 2); x++) {
             znajdzDostepneRuchy(tab, gracz);
         }
         Funkcje.brakRuchow = true;
@@ -126,53 +126,51 @@ public class Funkcje {
                 if (Funkcje.brakRuchow == false) {
                     Funkcje.przesun(tab, ruch);
                 }
-                Funkcje.brakRuchow = false;
-                for (int x = 0; x < 32; x++) {                                       //resetowanie planszy
+                for (int x = 0; x < 32; x++) {                                  //reset
                     Funkcje.ruchy[x] = 0;
                 }
+                Funkcje.brakRuchow = false;
                 break;
             case "minimax":
                 int najlepszy = -1;
-                int bestVal = -1000;
+                int najWartosc = -1000;
                 int[][] tab2 = new int[3][3];
-                for (int x = 0; x < 3; x++) {                                       //kopiowanie tablicy
+                for (int x = 0; x < 3; x++) {                                   //kopiowanie tablicy
                     for (int y = 0; y < 3; y++) {
                         tab2[x][y] = tab[x][y];
                     }
                 }
                 for (ruch = 0; ruch < 32; ruch++) {
                     if (Funkcje.ruchy[ruch] == 1) {
-                        // Make the move
                         Funkcje.przesun(tab, ruch);
-                        int moveVal = minimax2(tab, 0, false);
-                        
-                        // Undo the move
-                        for (int x = 0; x < 3; x++) {                               //kopiowanie tablicy
+                        int ruchWartosc = minimax2(tab, 0, false);
+                        for (int x = 0; x < 3; x++) {                           //kopiowanie tablicy
                             for (int y = 0; y < 3; y++) {
                                 tab[x][y] = tab2[x][y];
                             }
                         }
-
-                        if (moveVal > bestVal) {
+                        if (ruchWartosc > najWartosc) {
                             najlepszy = ruch;
-                            bestVal = moveVal;
+                            najWartosc = ruchWartosc;
                         }
                     }
                 }
                 Funkcje.przesun(tab, najlepszy);
+                for (int x = 0; x < 32; x++) {
+                    Funkcje.ruchy[x] = 0;
+                }
                 break;
             case "megamax":
-
+                //TODO
                 break;
         }
-
     }
 
     static void znajdzDostepneRuchy(int[][] tab, int gracz) {
         for (int n = 0; n < 3; n++) {
             for (int i = 0; i < 3; i++) {
                 if (tab[n][i] == 0) {
-                    int przypadek = n*10 + i;
+                    int przypadek = n * 10 + i;
                     switch (przypadek) {
                         case 0:
                             if (tab[0][1] == gracz) { // [0][1] -> [0][0]
@@ -436,9 +434,6 @@ public class Funkcje {
                 tab[1][2] = 0;
                 break;
             //////////////////////////
-        }
-        for (int x = 0; x < 32; x++) {
-            Funkcje.ruchy[x] = 0;
         }
     }
 }
