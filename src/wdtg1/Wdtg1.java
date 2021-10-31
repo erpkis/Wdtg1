@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 public class Wdtg1 {
 
+    static int opcja;
+
     public static void main(String[] args) {
         System.out.println("ACHI");
         Scanner sc = new Scanner(System.in);
-        int opcja;
         boolean zakoncz = false;
         do {
             System.out.println("Ktora wersja gry Achi?:");
@@ -27,7 +28,7 @@ public class Wdtg1 {
                     System.out.println(Zlozonosc.ZlozonoscMetoda1(3, false));
                     System.out.println(Zlozonosc.ZlozonoscMetoda2(3));
                     System.out.println();
-                    System.out.println(MiniMax.graj(1,3, true));                //testowe
+                    System.out.println(MiniMax.graj(1, 3, true));                //testowe
                     break;
                 case 4:
                     Funkcje.ilePartii();
@@ -35,7 +36,7 @@ public class Wdtg1 {
                     System.out.println(Zlozonosc.ZlozonoscMetoda1(4, false));
                     System.out.println(Zlozonosc.ZlozonoscMetoda2(4));
                     System.out.println();
-                    System.out.println(MiniMax.graj(1,4, true));                //testowe
+                    System.out.println(MiniMax.graj(1, 4, true));                //testowe
                     break;
                 case 0:
                     System.out.println();
