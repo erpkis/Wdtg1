@@ -110,18 +110,18 @@ public class Funkcje {
         }
         Funkcje.brakRuchow = true;
         for (int i = 0; i < 32; i++) {
-            if (ruchy[i] == 1) {
+            if (Funkcje.ruchy[i] == 1) {
                 Funkcje.brakRuchow = false;
                 ileMozliwosci++;
             }
         }
-        int ruch = 0;
         switch (algorytm) {
             case "brak":
+                int ruch = 0;
                 do {
                     Random losujRuch = new Random();
                     ruch = losujRuch.nextInt(32);
-                } while (ruchy[ruch] == 0 && Funkcje.brakRuchow == false);
+                } while (Funkcje.ruchy[ruch] == 0 && Funkcje.brakRuchow == false);
                 Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
                 if (Funkcje.brakRuchow == false) {
                     Funkcje.przesun(tab, ruch);
@@ -144,9 +144,9 @@ public class Funkcje {
         for (int n = 0; n < 3; n++) {
             for (int i = 0; i < 3; i++) {
                 if (tab[n][i] == 0) {
-                    int przypadek = n * 10 + i;
+                    String przypadek = ""+n+i;
                     switch (przypadek) {
-                        case 0:
+                        case "00":
                             if (tab[0][1] == gracz) { // [0][1] -> [0][0]
                                 Funkcje.ruchy[0] = 1;
                             }
@@ -157,7 +157,7 @@ public class Funkcje {
                                 Funkcje.ruchy[2] = 1;
                             }
                             break;
-                        case 1:
+                        case "01":
                             if (tab[0][0] == gracz) { // [0][0] -> [0][1]
                                 Funkcje.ruchy[3] = 1;
                             }
@@ -168,7 +168,7 @@ public class Funkcje {
                                 Funkcje.ruchy[5] = 1;
                             }
                             break;
-                        case 2:
+                        case "02":
                             if (tab[0][1] == gracz) { // [0][1] -> [0][2]
                                 Funkcje.ruchy[6] = 1;
                             }
@@ -179,7 +179,7 @@ public class Funkcje {
                                 Funkcje.ruchy[8] = 1;
                             }
                             break;
-                        case 10:
+                        case "10":
                             if (tab[0][0] == gracz) { // [0][0] -> [1][0]
                                 Funkcje.ruchy[9] = 1;
                             }
@@ -190,7 +190,7 @@ public class Funkcje {
                                 Funkcje.ruchy[11] = 1;
                             }
                             break;
-                        case 11:
+                        case "11":
                             if (tab[0][0] == gracz) { // [0][0] -> [1][1]
                                 Funkcje.ruchy[12] = 1;
                             }
@@ -216,7 +216,7 @@ public class Funkcje {
                                 Funkcje.ruchy[19] = 1;
                             }
                             break;
-                        case 12:
+                        case "12":
                             if (tab[0][2] == gracz) { // [0][2] -> [1][2]
                                 Funkcje.ruchy[20] = 1;
                             }
@@ -227,7 +227,7 @@ public class Funkcje {
                                 Funkcje.ruchy[22] = 1;
                             }
                             break;
-                        case 20:
+                        case "20":
                             if (tab[1][0] == gracz) { // [1][0] -> [2][0]
                                 Funkcje.ruchy[23] = 1;
                             }
@@ -238,7 +238,7 @@ public class Funkcje {
                                 Funkcje.ruchy[25] = 1;
                             }
                             break;
-                        case 21:
+                        case "21":
                             if (tab[2][0] == gracz) { // [2][0] -> [2][1]
                                 Funkcje.ruchy[26] = 1;
                             }
@@ -249,7 +249,7 @@ public class Funkcje {
                                 Funkcje.ruchy[28] = 1;
                             }
                             break;
-                        case 22:
+                        case "22":
                             if (tab[2][1] == gracz) { // [2][1] -> [2][2]
                                 Funkcje.ruchy[29] = 1;
                             }
