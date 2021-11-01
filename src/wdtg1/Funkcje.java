@@ -2,7 +2,6 @@ package wdtg1;
 
 import java.util.Scanner;
 import java.util.Random;
-import static wdtg1.MiniMax.minimax2;
 
 public class Funkcje {
 
@@ -10,7 +9,7 @@ public class Funkcje {
     static boolean brakRuchow = false;
     static int ilosc = 0;
     static String algorytm = "brak";
-    static int[] ruchy = new int[32];
+    static boolean[] ruchy = new boolean[32];
 
     static int ilePartii() {
         System.out.println("Ile partii rozegrac?");
@@ -110,7 +109,7 @@ public class Funkcje {
         }
         Funkcje.brakRuchow = true;
         for (int i = 0; i < 32; i++) {
-            if (Funkcje.ruchy[i] == 1) {
+            if (Funkcje.ruchy[i] == true) {
                 Funkcje.brakRuchow = false;
                 ileMozliwosci++;
             }
@@ -121,13 +120,13 @@ public class Funkcje {
                 do {
                     Random losujRuch = new Random();
                     ruch = losujRuch.nextInt(32);
-                } while (Funkcje.ruchy[ruch] == 0 && Funkcje.brakRuchow == false);
+                } while (Funkcje.ruchy[ruch] == false && Funkcje.brakRuchow == false);
                 Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
                 if (Funkcje.brakRuchow == false) {
                     Funkcje.przesun(tab, ruch);
                 }
                 for (int x = 0; x < 32; x++) {                                  //reset
-                    Funkcje.ruchy[x] = 0;
+                    Funkcje.ruchy[x] = false;
                 }
                 Funkcje.brakRuchow = false;
                 break;
@@ -144,120 +143,120 @@ public class Funkcje {
         for (int n = 0; n < 3; n++) {
             for (int i = 0; i < 3; i++) {
                 if (tab[n][i] == 0) {
-                    String przypadek = ""+n+i;
+                    String przypadek = "" + n + i;
                     switch (przypadek) {
                         case "00":
                             if (tab[0][1] == gracz) { // [0][1] -> [0][0]
-                                Funkcje.ruchy[0] = 1;
+                                Funkcje.ruchy[0] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [0][0]
-                                Funkcje.ruchy[1] = 1;
+                                Funkcje.ruchy[1] = true;
                             }
                             if (tab[1][0] == gracz) { // [1][0] -> [0][0]
-                                Funkcje.ruchy[2] = 1;
+                                Funkcje.ruchy[2] = true;
                             }
                             break;
                         case "01":
                             if (tab[0][0] == gracz) { // [0][0] -> [0][1]
-                                Funkcje.ruchy[3] = 1;
+                                Funkcje.ruchy[3] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [0][1]
-                                Funkcje.ruchy[4] = 1;
+                                Funkcje.ruchy[4] = true;
                             }
                             if (tab[0][2] == gracz) { // [0][2] -> [0][1]
-                                Funkcje.ruchy[5] = 1;
+                                Funkcje.ruchy[5] = true;
                             }
                             break;
                         case "02":
                             if (tab[0][1] == gracz) { // [0][1] -> [0][2]
-                                Funkcje.ruchy[6] = 1;
+                                Funkcje.ruchy[6] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [0][2]
-                                Funkcje.ruchy[7] = 1;
+                                Funkcje.ruchy[7] = true;
                             }
                             if (tab[1][2] == gracz) { // [1][2] -> [0][2]
-                                Funkcje.ruchy[8] = 1;
+                                Funkcje.ruchy[8] = true;
                             }
                             break;
                         case "10":
                             if (tab[0][0] == gracz) { // [0][0] -> [1][0]
-                                Funkcje.ruchy[9] = 1;
+                                Funkcje.ruchy[9] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [1][0]
-                                Funkcje.ruchy[10] = 1;
+                                Funkcje.ruchy[10] = true;
                             }
                             if (tab[2][0] == gracz) { // [2][0] -> [1][0]
-                                Funkcje.ruchy[11] = 1;
+                                Funkcje.ruchy[11] = true;
                             }
                             break;
                         case "11":
                             if (tab[0][0] == gracz) { // [0][0] -> [1][1]
-                                Funkcje.ruchy[12] = 1;
+                                Funkcje.ruchy[12] = true;
                             }
                             if (tab[0][1] == gracz) { // [0][1] -> [1][1]
-                                Funkcje.ruchy[13] = 1;
+                                Funkcje.ruchy[13] = true;
                             }
                             if (tab[0][2] == gracz) { // [0][2] -> [1][1]
-                                Funkcje.ruchy[14] = 1;
+                                Funkcje.ruchy[14] = true;
                             }
                             if (tab[1][0] == gracz) { // [1][0] -> [1][1]
-                                Funkcje.ruchy[15] = 1;
+                                Funkcje.ruchy[15] = true;
                             }
                             if (tab[1][2] == gracz) { // [1][2] -> [1][1]
-                                Funkcje.ruchy[16] = 1;
+                                Funkcje.ruchy[16] = true;
                             }
                             if (tab[2][0] == gracz) { // [2][0] -> [1][1]
-                                Funkcje.ruchy[17] = 1;
+                                Funkcje.ruchy[17] = true;
                             }
                             if (tab[2][1] == gracz) { // [2][1] -> [1][1]
-                                Funkcje.ruchy[18] = 1;
+                                Funkcje.ruchy[18] = true;
                             }
                             if (tab[2][2] == gracz) { // [2][2] -> [1][1]
-                                Funkcje.ruchy[19] = 1;
+                                Funkcje.ruchy[19] = true;
                             }
                             break;
                         case "12":
                             if (tab[0][2] == gracz) { // [0][2] -> [1][2]
-                                Funkcje.ruchy[20] = 1;
+                                Funkcje.ruchy[20] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [1][2]
-                                Funkcje.ruchy[21] = 1;
+                                Funkcje.ruchy[21] = true;
                             }
                             if (tab[2][2] == gracz) { // [2][2] -> [1][2]
-                                Funkcje.ruchy[22] = 1;
+                                Funkcje.ruchy[22] = true;
                             }
                             break;
                         case "20":
                             if (tab[1][0] == gracz) { // [1][0] -> [2][0]
-                                Funkcje.ruchy[23] = 1;
+                                Funkcje.ruchy[23] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [2][0]
-                                Funkcje.ruchy[24] = 1;
+                                Funkcje.ruchy[24] = true;
                             }
                             if (tab[2][1] == gracz) { // [2][1] -> [2][0]
-                                Funkcje.ruchy[25] = 1;
+                                Funkcje.ruchy[25] = true;
                             }
                             break;
                         case "21":
                             if (tab[2][0] == gracz) { // [2][0] -> [2][1]
-                                Funkcje.ruchy[26] = 1;
+                                Funkcje.ruchy[26] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [2][1]
-                                Funkcje.ruchy[27] = 1;
+                                Funkcje.ruchy[27] = true;
                             }
                             if (tab[2][2] == gracz) { // [2][2] -> [2][1]
-                                Funkcje.ruchy[28] = 1;
+                                Funkcje.ruchy[28] = true;
                             }
                             break;
                         case "22":
                             if (tab[2][1] == gracz) { // [2][1] -> [2][2]
-                                Funkcje.ruchy[29] = 1;
+                                Funkcje.ruchy[29] = true;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [2][2]
-                                Funkcje.ruchy[30] = 1;
+                                Funkcje.ruchy[30] = true;
                             }
                             if (tab[1][2] == gracz) { // [1][2] -> [2][2]
-                                Funkcje.ruchy[31] = 1;
+                                Funkcje.ruchy[31] = true;
                             }
                             break;
                         default:
