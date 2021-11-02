@@ -8,8 +8,17 @@ public class Funkcje {
     static boolean czyPokazac = false;
     static boolean brakRuchow = false;
     static int ilosc = 0;
-    static String algorytm = "brak";
     static boolean[] ruchy = new boolean[32];
+
+    static void wybierzOpcje() {
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextInt()) {
+            Wdtg1.opcja = sc.nextInt();
+        } else {
+            System.out.println("Wprowadzono bledna dana, sprobuj ponownie");
+            wybierzOpcje();
+        }
+    }
 
     static int ilePartii() {
         System.out.println("Ile partii rozegrac?");
@@ -18,7 +27,20 @@ public class Funkcje {
             Funkcje.ilosc = sc.nextInt();
             return Funkcje.ilosc;
         } else {
-            return 0;
+            return ilePartii();
+        }
+    }
+
+    static boolean czyPokazacPrzebiegPartii() {
+        System.out.println("Czy chcesz zobaczyc przebieg partii?");
+        System.out.println("Wpisz 'true' jesli tak");
+        Scanner sc = new Scanner(System.in);
+        if (sc.hasNextBoolean()) {
+            Funkcje.czyPokazac = sc.nextBoolean();
+            return Funkcje.czyPokazac;
+        } else {
+            Funkcje.czyPokazac = false;
+            return false;
         }
     }
 
@@ -77,7 +99,7 @@ public class Funkcje {
         return poprawne;
     }
 
-    static double SPU(double ilosc, int wersjaGry) {                            //funkcja liczy Stosunek Poprawnych Ustawien pionkow na planszy do wszystkich mozliwych ustawien pionkow na planszy
+    static double SPU(double ilosc, int wersjaGry) {
         double ilePoprawnych = 0;
         for (int ile = 1; ile <= ilosc; ile++) {
             int ileBialych = 0, ileCzarnych = 0;
@@ -91,7 +113,6 @@ public class Funkcje {
                     } else if (tab[n][i] == 2) {
                         ileCzarnych++;
                     }
-
                 }
             }
             if (Funkcje.czyPoprawne(ileBialych, ileCzarnych, wersjaGry, tab)) {
@@ -104,9 +125,7 @@ public class Funkcje {
 
     static void wykonajPrzesuniecie(int tab[][], int gracz, int wersjaGry) {
         int ileMozliwosci = 0;
-        for (int x = 0; x < 9 - (wersjaGry * 2); x++) {
-            znajdzDostepneRuchy(tab, gracz);
-        }
+        znajdzDostepneRuchy(tab, gracz);
         Funkcje.brakRuchow = true;
         for (int i = 0; i < 32; i++) {
             if (Funkcje.ruchy[i] == true) {
@@ -114,32 +133,25 @@ public class Funkcje {
                 ileMozliwosci++;
             }
         }
-        switch (algorytm) {
-            case "brak":
-                int ruch = 0;
-                do {
-                    Random losujRuch = new Random();
-                    ruch = losujRuch.nextInt(32);
-                } while (Funkcje.ruchy[ruch] == false && Funkcje.brakRuchow == false);
-                Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
-                if (Funkcje.brakRuchow == false) {
-                    Funkcje.przesun(tab, ruch);
-                }
-                for (int x = 0; x < 32; x++) {                                  //reset
-                    Funkcje.ruchy[x] = false;
-                }
-                Funkcje.brakRuchow = false;
-                break;
-            case "minimax":
-
-                break;
-            case "megamax":
-                //TODO
-                break;
+        int ruch = 0;
+        do {
+            Random losujRuch = new Random();
+            ruch = losujRuch.nextInt(32);
+        } while (Funkcje.ruchy[ruch] == false && Funkcje.brakRuchow == false);
+        Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
+        if (Funkcje.brakRuchow == false) {
+            Funkcje.przesun(tab, ruch);
         }
+        for (int x = 0; x < 32; x++) {                                          //reset
+            Funkcje.ruchy[x] = false;
+        }
+        Funkcje.brakRuchow = false;
     }
 
     static void znajdzDostepneRuchy(int[][] tab, int gracz) {
+        for (int x = 0; x < 32; x++) {
+            Funkcje.ruchy[x] = false;
+        }
         for (int n = 0; n < 3; n++) {
             for (int i = 0; i < 3; i++) {
                 if (tab[n][i] == 0) {

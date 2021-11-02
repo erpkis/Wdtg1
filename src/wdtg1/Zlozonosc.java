@@ -9,8 +9,7 @@ public class Zlozonosc {
     static double sumujWszystkieRuchy = 0;
 
     static double ZlozonoscMetoda1(int wersjaGry, boolean czyPokazac) {
-        Funkcje.algorytm = "brak";
-        Funkcje.czyPokazac = czyPokazac;
+        //Funkcje.czyPokazac = czyPokazac;
         double wynik = Zlozonosc.graj(Funkcje.ilosc, wersjaGry);
         System.out.print("Zlozonosc gry (metoda1): ");
         return wynik;
@@ -25,7 +24,7 @@ public class Zlozonosc {
     }
 
     static double graj(double ilosc, int wersjaGry) {
-        double parB = 0, parD;
+        double parB = 0, parD = 0;
         int[][] tab = new int[3][3];
         Random r = new Random();
         int n, i;
@@ -41,7 +40,7 @@ public class Zlozonosc {
             Zlozonosc.sumujWszystkieMozliwosci = 0;
             Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
             if (Funkcje.czyPokazac) {
-                System.out.println("Gra nr " + (gra + 1) + ":");
+                System.out.println("Gra 'Random' nr " + (gra + 1) + ":");
                 System.out.println();
             }
             do {
@@ -55,8 +54,6 @@ public class Zlozonosc {
                 ileMozliwosci--;
                 Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
                 Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
-                //System.out.println(Zlozonosc.sumujWszystkieRuchy);
-                //System.out.println(Zlozonosc.sumujWszystkieMozliwosci);
                 if ((Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false) && Funkcje.brakRuchow == false) {
                     ileRuchow++;
                     Zlozonosc.sumujWszystkieRuchy++;
@@ -69,26 +66,27 @@ public class Zlozonosc {
             if (Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false && Funkcje.brakRuchow == false) {
                 do {
                     Funkcje.wykonajPrzesuniecie(tab, 1, wersjaGry);
+                    Zlozonosc.sumujWszystkieRuchy++;
                     Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
-                    //System.out.println(Zlozonosc.sumujWszystkieRuchy);
-                    //System.out.println(Zlozonosc.sumujWszystkieMozliwosci);
                     if (Funkcje.czyWygrywa(tab, 1)) {
                         break;
                     }
                     Funkcje.wykonajPrzesuniecie(tab, 2, wersjaGry);
+                    Zlozonosc.sumujWszystkieRuchy++;
                     Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
-                    //System.out.println(Zlozonosc.sumujWszystkieRuchy);
-                    //System.out.println(Zlozonosc.sumujWszystkieMozliwosci);
                 } while (Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false && Funkcje.brakRuchow == false);
             }
             double srednia = Zlozonosc.sumujWszystkieMozliwosci / ileRuchow;
             Zlozonosc.sumujWszystkieMozliwosci = 0;
             parB += srednia;
+            double sredniaD = Zlozonosc.sumujWszystkieRuchy;
+            Zlozonosc.sumujWszystkieRuchy = 0;
+            parD += sredniaD;
         }
         parB /= Funkcje.ilosc;
-        parD = Zlozonosc.sumujWszystkieRuchy / Funkcje.ilosc;
-        //System.out.println(parB);
-        //System.out.println(parD);
+        parD /= Funkcje.ilosc;
+        System.out.println("parametr b: " + parB);
+        System.out.println("parametr d: " + parD);
         double wynik = pow(parB, parD);
         return wynik;
     }

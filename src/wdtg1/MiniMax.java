@@ -7,12 +7,11 @@ public class MiniMax {
 
     static double sumujWszystkieMozliwosci = 0;
     static double sumujWszystkieRuchy = 0;
-    static int player = 1, opponent = 2;
+    static int gracz = 1, przeciwnik = 2;
 
     static double graj(double ilosc, int wersjaGry, boolean czyPokazac) {
-        Funkcje.algorytm = "minimax";
         Funkcje.czyPokazac = czyPokazac;
-        double parB = 0, parD;
+        double parB = 0, parD = 0;
         int[][] tab = new int[3][3];
         Random r = new Random();
         int ileRuchow, ileMozliwosci;
@@ -27,7 +26,7 @@ public class MiniMax {
             MiniMax.sumujWszystkieMozliwosci = 0;
             MiniMax.sumujWszystkieMozliwosci += ileMozliwosci;
             if (Funkcje.czyPokazac) {
-                System.out.println("Gra nr " + (gra + 1) + ":");
+                System.out.println("Gra 'MiniMax' nr " + (gra + 1) + ":");
                 System.out.println();
             }
             int x = r.nextInt(3);
@@ -37,95 +36,82 @@ public class MiniMax {
             MiniMax.sumujWszystkieRuchy++;
             Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
             do {
-                ////////////////////////////////////////////////////////////////
-                MiniMax.player = 2;
-                MiniMax.opponent = 1;
-                findBestMove(tab, 0);
+                MiniMax.gracz = 2;
+                MiniMax.przeciwnik = 1;
+                wykonajNajlepszyRuch(tab, 0);
                 ileRuchow++;
                 MiniMax.sumujWszystkieRuchy++;
+                ileMozliwosci--;
+                MiniMax.sumujWszystkieMozliwosci += ileMozliwosci;
                 Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
                 if (ileRuchow == wersjaGry * 2) {
                     break;
                 }
-                MiniMax.player = 1;
-                MiniMax.opponent = 2;
-                findBestMove(tab, 0);
+                MiniMax.gracz = 1;
+                MiniMax.przeciwnik = 2;
+                wykonajNajlepszyRuch(tab, 0);
                 ileRuchow++;
                 MiniMax.sumujWszystkieRuchy++;
-                Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
-                ////////////////////////////////////////////////////////////////
                 ileMozliwosci--;
                 MiniMax.sumujWszystkieMozliwosci += ileMozliwosci;
-                //System.out.println(MiniMax.sumujWszystkieRuchy);
-                //System.out.println(MiniMax.sumujWszystkieMozliwosci);
-                //if ((Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false) && Funkcje.brakRuchow == false) {
-                //ileRuchow++;
-                //MiniMax.sumujWszystkieRuchy++;
-                //} else {
-                //ileRuchow++;
-                //MiniMax.sumujWszystkieRuchy++;
-                //break;
-                //}
+                Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
             } while (true);
             if (Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false && Funkcje.brakRuchow == false) {
                 do {
-                    //MiniMax.player = 1;
-                    //MiniMax.opponent = 2;
-                    findBestMove(tab, 1);
+                    MiniMax.gracz = 1;
+                    MiniMax.przeciwnik = 2;
+                    wykonajNajlepszyRuch(tab, 1);
                     ileRuchow++;
                     MiniMax.sumujWszystkieRuchy++;
                     Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
-                    //System.out.println(MiniMax.sumujWszystkieRuchy);
-                    //System.out.println(MiniMax.sumujWszystkieMozliwosci);
-                    if (Funkcje.czyWygrywa(tab, 1)) {
+                    if (Funkcje.czyWygrywa(tab, 1) == true || Funkcje.brakRuchow == true) {
                         break;
                     }
-                    //MiniMax.player = 2;
-                    //MiniMax.opponent = 1;
-                    findBestMove(tab, 1);
+                    MiniMax.gracz = 2;
+                    MiniMax.przeciwnik = 1;
+                    wykonajNajlepszyRuch(tab, 1);
                     ileRuchow++;
                     MiniMax.sumujWszystkieRuchy++;
                     Funkcje.pokazPlansze(tab, Funkcje.czyPokazac);
-                    //System.out.println(MiniMax.sumujWszystkieRuchy);
-                    //System.out.println(MiniMax.sumujWszystkieMozliwosci);
                 } while (Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false && Funkcje.brakRuchow == false);
             }
-            double srednia = MiniMax.sumujWszystkieMozliwosci / ileRuchow;
+            double sredniaB = MiniMax.sumujWszystkieMozliwosci / ileRuchow;
             MiniMax.sumujWszystkieMozliwosci = 0;
-            parB += srednia;
+            parB += sredniaB;
+            double sredniaD = MiniMax.sumujWszystkieRuchy;
+            MiniMax.sumujWszystkieRuchy = 0;
+            parD += sredniaD;
         }
-        MiniMax.player = 1;
-        MiniMax.opponent = 2;
+        MiniMax.gracz = 1;
+        MiniMax.przeciwnik = 2;
         parB /= Funkcje.ilosc;
-        parD = MiniMax.sumujWszystkieRuchy / Funkcje.ilosc;
-        //System.out.println(parB);
-        //System.out.println(parD);
+        parD /= Funkcje.ilosc;
+        System.out.println("parametr b: " + parB);
+        System.out.println("parametr d: " + parD);
         double wynik = pow(parB, parD);
+        System.out.print("Zlozonosc gry dla algorytmu MiniMax: ");
         return wynik;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-    static int minimax(int board[][], int depth, boolean isMax) {
-        int score = funkcjaKosztu(board);
-        if (score == 10) {
-            return score;
+    static int minimax(int tab[][], int glebokosc, boolean czyMax) {
+        int wartosc = funkcjaKosztu(tab);
+        if (wartosc == 10) {
+            return wartosc;
         }
-        if (score == -10) {
-            return score;
+        if (wartosc == -10) {
+            return wartosc;
         }
-        if (isMovesLeft(board) == false) {
+        if (czyMoznaWykonacRuch(tab) == false) {
             return 0;
         }
-        if (isMax) {
+        if (czyMax) {
             int best = -1000;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (board[i][j] == 0) {
-                        board[i][j] = MiniMax.player;
-                        best = Math.max(best, minimax(board, depth + 1, !isMax));
-                        board[i][j] = 0;
+                    if (tab[i][j] == 0) {
+                        tab[i][j] = MiniMax.gracz;
+                        best = Math.max(best, minimax(tab, glebokosc + 1, !czyMax));
+                        tab[i][j] = 0;
                     }
                 }
             }
@@ -134,10 +120,10 @@ public class MiniMax {
             int best = 1000;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    if (board[i][j] == 0) {
-                        board[i][j] = MiniMax.opponent;
-                        best = Math.min(best, minimax(board, depth + 1, !isMax));
-                        board[i][j] = 0;
+                    if (tab[i][j] == 0) {
+                        tab[i][j] = MiniMax.przeciwnik;
+                        best = Math.min(best, minimax(tab, glebokosc + 1, !czyMax));
+                        tab[i][j] = 0;
                     }
                 }
             }
@@ -145,30 +131,28 @@ public class MiniMax {
         }
     }
 
-    static int minimax2(int[][] tab, int depth, boolean isMax) {
+    static int minimax2(int[][] tab, int glebokosc, boolean czyMax) {
         int[][] tab2 = new int[3][3];
         for (int x = 0; x < 3; x++) {                                           //kopiowanie tablicy
             for (int y = 0; y < 3; y++) {
                 tab2[x][y] = tab[x][y];
             }
         }
-        int score = funkcjaKosztu(tab);
-        if (score == 10) {
-            return score;
+        int wartosc = funkcjaKosztu(tab);
+        if (wartosc == 10) {
+            return wartosc;
         }
-        if (score == -10) {
-            return score;
+        if (wartosc == -10) {
+            return wartosc;
         }
-        if (Funkcje.czyWygrywa(tab, 1) == true || Funkcje.czyWygrywa(tab, 2) == true || Funkcje.brakRuchow == false) {
+        if (Funkcje.czyWygrywa(tab, 1) == false && Funkcje.czyWygrywa(tab, 2) == false && Funkcje.brakRuchow == false) {
             return 0;
         }
-        if (isMax) {
+        if (czyMax) {
             int best = -1000;
-            MiniMax.player = 1;
-            MiniMax.opponent = 2;
-            Funkcje.znajdzDostepneRuchy(tab, MiniMax.player);
-            findBestMove(tab, 1);
-            best = Math.max(best, minimax2(tab, depth + 1, !isMax));
+            Funkcje.znajdzDostepneRuchy(tab, MiniMax.gracz);
+            wykonajNajlepszyRuch(tab, 1);
+            best = Math.max(best, minimax2(tab, glebokosc + 1, !czyMax));
             for (int x = 0; x < 3; x++) {                                           //kopiowanie tablicy
                 for (int y = 0; y < 3; y++) {
                     tab[x][y] = tab2[x][y];
@@ -177,11 +161,9 @@ public class MiniMax {
             return best;
         } else {
             int best = 1000;
-            MiniMax.player = 2;
-            MiniMax.opponent = 1;
-            Funkcje.znajdzDostepneRuchy(tab, MiniMax.player);
-            findBestMove(tab, 1);
-            best = Math.min(best, minimax2(tab, depth + 1, !isMax));
+            Funkcje.znajdzDostepneRuchy(tab, MiniMax.przeciwnik);
+            wykonajNajlepszyRuch(tab, 1);
+            best = Math.min(best, minimax2(tab, glebokosc + 1, !czyMax));
             for (int x = 0; x < 3; x++) {                                           //kopiowanie tablicy
                 for (int y = 0; y < 3; y++) {
                     tab[x][y] = tab2[x][y];
@@ -192,76 +174,79 @@ public class MiniMax {
 
     }
 
-    static int funkcjaKosztu(int b[][]) {
-        for (int row = 0; row < 3; row++) {
-            if (b[row][0] == b[row][1] && b[row][1] == b[row][2]) {
-                if (b[row][0] == MiniMax.player) {
+    static int funkcjaKosztu(int t[][]) {
+        for (int wiersz = 0; wiersz < 3; wiersz++) {
+            if (t[wiersz][0] == t[wiersz][1] && t[wiersz][1] == t[wiersz][2]) {
+                if (t[wiersz][0] == MiniMax.gracz) {
                     return +10;
-                } else if (b[row][0] == MiniMax.opponent) {
+                } else if (t[wiersz][0] == MiniMax.przeciwnik) {
                     return -10;
                 }
             }
         }
-        for (int col = 0; col < 3; col++) {
-            if (b[0][col] == b[1][col] && b[1][col] == b[2][col]) {
-                if (b[0][col] == MiniMax.player) {
+        for (int kolumna = 0; kolumna < 3; kolumna++) {
+            if (t[0][kolumna] == t[1][kolumna] && t[1][kolumna] == t[2][kolumna]) {
+                if (t[0][kolumna] == MiniMax.gracz) {
                     return +10;
-                } else if (b[0][col] == MiniMax.opponent) {
+                } else if (t[0][kolumna] == MiniMax.przeciwnik) {
                     return -10;
                 }
             }
         }
-        if (b[0][0] == b[1][1] && b[1][1] == b[2][2]) {
-            if (b[0][0] == MiniMax.player) {
+        if (t[0][0] == t[1][1] && t[1][1] == t[2][2]) {
+            if (t[0][0] == MiniMax.gracz) {
                 return +10;
-            } else if (b[0][0] == MiniMax.opponent) {
+            } else if (t[0][0] == MiniMax.przeciwnik) {
                 return -10;
             }
         }
-        if (b[0][2] == b[1][1] && b[1][1] == b[2][0]) {
-            if (b[0][2] == MiniMax.player) {
+        if (t[0][2] == t[1][1] && t[1][1] == t[2][0]) {
+            if (t[0][2] == MiniMax.gracz) {
                 return +10;
-            } else if (b[0][2] == MiniMax.opponent) {
+            } else if (t[0][2] == MiniMax.przeciwnik) {
                 return -10;
             }
         }
         return 0;
     }
 
-    static void findBestMove(int[][] tab, int faza) {
-        int bestVal = -1000;
-        int tabN = -1, tabI = -1;
+    static void wykonajNajlepszyRuch(int[][] tab, int faza) {
+        int najWartosc = -1000;
         if (faza == 0) {
+            najWartosc = -1000;
+            int tabN = -1, tabI = -1;
             for (int n = 0; n < 3; n++) {
                 for (int i = 0; i < 3; i++) {
                     if (tab[n][i] == 0) {
-                        tab[n][i] = MiniMax.player;
-                        int moveVal = minimax(tab, 0, false);
+                        tab[n][i] = MiniMax.gracz;
+                        int ruchWartosc = minimax(tab, 0, false);
                         tab[n][i] = 0;
-                        if (moveVal > bestVal) {
+                        if (ruchWartosc > najWartosc) {
                             tabN = n;
                             tabI = i;
-                            bestVal = moveVal;
+                            najWartosc = ruchWartosc;
                         }
                     }
                 }
             }
-            tab[tabN][tabI] = MiniMax.player;
+            tab[tabN][tabI] = MiniMax.gracz;
         } else if (faza == 1) {
+            najWartosc = -1000;
             int najlepszy = -1;
-            int najWartosc = -1000;
+            int ileMozliwosci = 0;
             int[][] tab2 = new int[3][3];
             for (int x = 0; x < 3; x++) {                                       //kopiowanie tablicy
                 for (int y = 0; y < 3; y++) {
                     tab2[x][y] = tab[x][y];
                 }
             }
-            Funkcje.znajdzDostepneRuchy(tab, MiniMax.player);                   //testuje tak
-            //Funkcje.wykonajPrzesuniecie(tab, MiniMax.player, 4);              //tutaj problemo !!!
+            Funkcje.znajdzDostepneRuchy(tab, MiniMax.gracz);
+            Funkcje.brakRuchow = true;
             for (int ruch = 0; ruch < 32; ruch++) {
                 if (Funkcje.ruchy[ruch] == true) {
+                    Funkcje.brakRuchow = false;
+                    ileMozliwosci++;
                     Funkcje.przesun(tab, ruch);
-
                     int ruchWartosc = minimax2(tab, 0, false);
                     for (int x = 0; x < 3; x++) {                               //kopiowanie tablicy
                         for (int y = 0; y < 3; y++) {
@@ -272,22 +257,20 @@ public class MiniMax {
                         najlepszy = ruch;
                         najWartosc = ruchWartosc;
                     }
-                    //System.out.println(ruchWartosc);
                 }
             }
-            //System.out.println(najlepszy);
+            MiniMax.sumujWszystkieMozliwosci += ileMozliwosci;
             Funkcje.przesun(tab, najlepszy);
-            Funkcje.pokazPlansze(tab, true);
             for (int x = 0; x < 32; x++) {
                 Funkcje.ruchy[x] = false;
             }
         }
     }
 
-    static boolean isMovesLeft(int board[][]) {
+    static boolean czyMoznaWykonacRuch(int tab[][]) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (board[i][j] == 0) {
+                if (tab[i][j] == 0) {
                     return true;
                 }
             }
