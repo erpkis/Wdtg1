@@ -19,19 +19,21 @@ public class Wdtg1 {
                     Funkcje.ilePartii();
                     Funkcje.czyPokazacPrzebiegPartii();
                     System.out.println();
-                    System.out.println(Zlozonosc.ZlozonoscMetoda1(3, false));   //true jesli chcesz zobaczyc przebieg partii random
+                    System.out.println(Zlozonosc.ZlozonoscMetoda1(3, Funkcje.czyPokazac));
                     System.out.println(Zlozonosc.ZlozonoscMetoda2(3));
                     System.out.println();
-                    System.out.println(MiniMax.graj(Funkcje.ilosc, 3, Funkcje.czyPokazac));
+                    MiniMax_VS_Random.graj(Funkcje.ilosc, 3, Funkcje.czyPokazac);
+                    System.out.println();
                     break;
                 case 4:
                     Funkcje.ilePartii();
                     Funkcje.czyPokazacPrzebiegPartii();
                     System.out.println();
-                    System.out.println(Zlozonosc.ZlozonoscMetoda1(4, false));   //true jesli chcesz zobaczyc przebieg partii random
+                    System.out.println(Zlozonosc.ZlozonoscMetoda1(4, Funkcje.czyPokazac));
                     System.out.println(Zlozonosc.ZlozonoscMetoda2(4));
                     System.out.println();
-                    System.out.println(MiniMax.graj(Funkcje.ilosc, 4, Funkcje.czyPokazac));
+                    MiniMax_VS_Random.graj(Funkcje.ilosc, 4, Funkcje.czyPokazac);
+                    System.out.println();
                     break;
                 case 0:
                     System.out.println();

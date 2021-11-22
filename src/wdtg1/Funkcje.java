@@ -8,7 +8,6 @@ public class Funkcje {
     static boolean czyPokazac = false;
     static boolean brakRuchow = false;
     static int ilosc = 0;
-    static boolean[] ruchy = new boolean[32];
 
     static void wybierzOpcje() {
         Scanner sc = new Scanner(System.in);
@@ -73,7 +72,8 @@ public class Funkcje {
         }
         if (tab[1][1] == gracz && tab[0][0] == gracz && tab[2][2] == gracz) {
             wygrana = true;
-        } else if (tab[1][1] == gracz && tab[2][0] == gracz && tab[0][2] == gracz) {
+        }
+        if (tab[1][1] == gracz && tab[2][0] == gracz && tab[0][2] == gracz) {
             wygrana = true;
         }
         return wygrana;
@@ -123,35 +123,11 @@ public class Funkcje {
         return wynik;
     }
 
-    static void wykonajPrzesuniecie(int tab[][], int gracz, int wersjaGry) {
-        int ileMozliwosci = 0;
-        znajdzDostepneRuchy(tab, gracz);
-        Funkcje.brakRuchow = true;
-        for (int i = 0; i < 32; i++) {
-            if (Funkcje.ruchy[i] == true) {
-                Funkcje.brakRuchow = false;
-                ileMozliwosci++;
-            }
-        }
-        int ruch = 0;
-        do {
-            Random losujRuch = new Random();
-            ruch = losujRuch.nextInt(32);
-        } while (Funkcje.ruchy[ruch] == false && Funkcje.brakRuchow == false);
-        Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
-        if (Funkcje.brakRuchow == false) {
-            Funkcje.przesun(tab, ruch);
-        }
-        for (int x = 0; x < 32; x++) {                                          //reset
-            Funkcje.ruchy[x] = false;
-        }
-        Funkcje.brakRuchow = false;
-    }
-
-    static void znajdzDostepneRuchy(int[][] tab, int gracz) {
+    static void znajdzDostepneRuchy(int[][] tab, Boolean ruchy[], int gracz) {
         for (int x = 0; x < 32; x++) {
-            Funkcje.ruchy[x] = false;
+            ruchy[x] = false;
         }
+        Funkcje.brakRuchow = true;
         for (int n = 0; n < 3; n++) {
             for (int i = 0; i < 3; i++) {
                 if (tab[n][i] == 0) {
@@ -159,116 +135,148 @@ public class Funkcje {
                     switch (przypadek) {
                         case "00":
                             if (tab[0][1] == gracz) { // [0][1] -> [0][0]
-                                Funkcje.ruchy[0] = true;
+                                ruchy[0] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [0][0]
-                                Funkcje.ruchy[1] = true;
+                                ruchy[1] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][0] == gracz) { // [1][0] -> [0][0]
-                                Funkcje.ruchy[2] = true;
+                                ruchy[2] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "01":
                             if (tab[0][0] == gracz) { // [0][0] -> [0][1]
-                                Funkcje.ruchy[3] = true;
+                                ruchy[3] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [0][1]
-                                Funkcje.ruchy[4] = true;
+                                ruchy[4] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[0][2] == gracz) { // [0][2] -> [0][1]
-                                Funkcje.ruchy[5] = true;
+                                ruchy[5] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "02":
                             if (tab[0][1] == gracz) { // [0][1] -> [0][2]
-                                Funkcje.ruchy[6] = true;
+                                ruchy[6] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [0][2]
-                                Funkcje.ruchy[7] = true;
+                                ruchy[7] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][2] == gracz) { // [1][2] -> [0][2]
-                                Funkcje.ruchy[8] = true;
+                                ruchy[8] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "10":
                             if (tab[0][0] == gracz) { // [0][0] -> [1][0]
-                                Funkcje.ruchy[9] = true;
+                                ruchy[9] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [1][0]
-                                Funkcje.ruchy[10] = true;
+                                ruchy[10] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][0] == gracz) { // [2][0] -> [1][0]
-                                Funkcje.ruchy[11] = true;
+                                ruchy[11] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "11":
                             if (tab[0][0] == gracz) { // [0][0] -> [1][1]
-                                Funkcje.ruchy[12] = true;
+                                ruchy[12] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[0][1] == gracz) { // [0][1] -> [1][1]
-                                Funkcje.ruchy[13] = true;
+                                ruchy[13] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[0][2] == gracz) { // [0][2] -> [1][1]
-                                Funkcje.ruchy[14] = true;
+                                ruchy[14] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][0] == gracz) { // [1][0] -> [1][1]
-                                Funkcje.ruchy[15] = true;
+                                ruchy[15] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][2] == gracz) { // [1][2] -> [1][1]
-                                Funkcje.ruchy[16] = true;
+                                ruchy[16] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][0] == gracz) { // [2][0] -> [1][1]
-                                Funkcje.ruchy[17] = true;
+                                ruchy[17] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][1] == gracz) { // [2][1] -> [1][1]
-                                Funkcje.ruchy[18] = true;
+                                ruchy[18] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][2] == gracz) { // [2][2] -> [1][1]
-                                Funkcje.ruchy[19] = true;
+                                ruchy[19] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "12":
                             if (tab[0][2] == gracz) { // [0][2] -> [1][2]
-                                Funkcje.ruchy[20] = true;
+                                ruchy[20] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [1][2]
-                                Funkcje.ruchy[21] = true;
+                                ruchy[21] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][2] == gracz) { // [2][2] -> [1][2]
-                                Funkcje.ruchy[22] = true;
+                                ruchy[22] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "20":
                             if (tab[1][0] == gracz) { // [1][0] -> [2][0]
-                                Funkcje.ruchy[23] = true;
+                                ruchy[23] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [2][0]
-                                Funkcje.ruchy[24] = true;
+                                ruchy[24] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][1] == gracz) { // [2][1] -> [2][0]
-                                Funkcje.ruchy[25] = true;
+                                ruchy[25] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "21":
                             if (tab[2][0] == gracz) { // [2][0] -> [2][1]
-                                Funkcje.ruchy[26] = true;
+                                ruchy[26] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [2][1]
-                                Funkcje.ruchy[27] = true;
+                                ruchy[27] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[2][2] == gracz) { // [2][2] -> [2][1]
-                                Funkcje.ruchy[28] = true;
+                                ruchy[28] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         case "22":
                             if (tab[2][1] == gracz) { // [2][1] -> [2][2]
-                                Funkcje.ruchy[29] = true;
+                                ruchy[29] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][1] == gracz) { // [1][1] -> [2][2]
-                                Funkcje.ruchy[30] = true;
+                                ruchy[30] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             if (tab[1][2] == gracz) { // [1][2] -> [2][2]
-                                Funkcje.ruchy[31] = true;
+                                ruchy[31] = true;
+                                Funkcje.brakRuchow = false;
                             }
                             break;
                         default:
@@ -417,6 +425,149 @@ public class Funkcje {
             case 31:
                 tab[2][2] = tab[1][2];
                 tab[1][2] = 0;
+                break;
+            //////////////////////////
+        }
+    }
+
+    static void cofnijPrzesuniecie(int tab[][], int ruch) {
+        switch (ruch) {
+            //////////////////////////
+            case 0:
+                tab[0][1] = tab[0][0];
+                tab[0][0] = 0;
+                break;
+            case 1:
+                tab[1][1] = tab[0][0];
+                tab[0][0] = 0;
+                break;
+            case 2:
+                tab[1][0] = tab[0][0];
+                tab[0][0] = 0;
+                break;
+            //////////////////////////
+            case 3:
+                tab[0][0] = tab[0][1];
+                tab[0][1] = 0;
+                break;
+            case 4:
+                tab[1][1] = tab[0][1];
+                tab[0][1] = 0;
+                break;
+            case 5:
+                tab[0][2] = tab[0][1];
+                tab[0][1] = 0;
+                break;
+            //////////////////////////
+            case 6:
+                tab[0][1] = tab[0][2];
+                tab[0][2] = 0;
+                break;
+            case 7:
+                tab[1][1] = tab[0][2];
+                tab[0][2] = 0;
+                break;
+            case 8:
+                tab[1][2] = tab[0][2];
+                tab[0][2] = 0;
+                break;
+            //////////////////////////
+            case 9:
+                tab[0][0] = tab[1][0];
+                tab[1][0] = 0;
+                break;
+            case 10:
+                tab[1][1] = tab[1][0];
+                tab[1][0] = 0;
+                break;
+            case 11:
+                tab[2][0] = tab[1][0];
+                tab[1][0] = 0;
+                break;
+            //////////////////////////
+            case 12:
+                tab[0][0] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 13:
+                tab[0][1] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 14:
+                tab[0][2] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 15:
+                tab[1][0] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 16:
+                tab[1][2] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 17:
+                tab[2][0] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 18:
+                tab[2][1] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            case 19:
+                tab[2][2] = tab[1][1];
+                tab[1][1] = 0;
+                break;
+            //////////////////////////
+            case 20:
+                tab[0][2] = tab[1][2];
+                tab[1][2] = 0;
+                break;
+            case 21:
+                tab[1][1] = tab[1][2];
+                tab[1][2] = 0;
+                break;
+            case 22:
+                tab[2][2] = tab[1][2];
+                tab[1][2] = 0;
+                break;
+            //////////////////////////
+            case 23:
+                tab[1][0] = tab[2][0];
+                tab[2][0] = 0;
+                break;
+            case 24:
+                tab[1][1] = tab[2][0];
+                tab[2][0] = 0;
+                break;
+            case 25:
+                tab[2][1] = tab[2][0];
+                tab[2][0] = 0;
+                break;
+            //////////////////////////
+            case 26:
+                tab[2][0] = tab[2][1];
+                tab[2][1] = 0;
+                break;
+            case 27:
+                tab[1][1] = tab[2][1];
+                tab[2][1] = 0;
+                break;
+            case 28:
+                tab[2][2] = tab[2][1];
+                tab[2][1] = 0;
+                break;
+            //////////////////////////
+            case 29:
+                tab[2][1] = tab[2][2];
+                tab[2][2] = 0;
+                break;
+            case 30:
+                tab[1][1] = tab[2][2];
+                tab[2][2] = 0;
+                break;
+            case 31:
+                tab[1][2] = tab[2][2];
+                tab[2][2] = 0;
                 break;
             //////////////////////////
         }
