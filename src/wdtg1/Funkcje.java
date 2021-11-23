@@ -123,6 +123,10 @@ public class Funkcje {
         return wynik;
     }
 
+    public static double zaokraglenie(double value) {
+        return Math.round(value * 10000.0) / 10000.0;
+    }
+
     static void znajdzDostepneRuchy(int[][] tab, Boolean ruchy[], int gracz) {
         for (int x = 0; x < 32; x++) {
             ruchy[x] = false;

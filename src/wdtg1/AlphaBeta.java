@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
 
-public class MiniMax {
+public class AlphaBeta {
 
     static int glebia = 1000;
 
-    static int minimax(int tab[][], int glebokosc, boolean czyMax, int faza, int gracz) {
+    static int minimax(int tab[][], int glebokosc, boolean czyMax, int faza, int gracz, int alpha, int beta) {
         if (faza == 1) {
             int przeciwnik = gracz == 1 ? 2 : 1;
             int wartosc = funkcjaKosztu(tab, gracz);
@@ -30,9 +30,13 @@ public class MiniMax {
                     for (int j = 0; j < 3; j++) {
                         if (tab[i][j] == 0) {
                             tab[i][j] = gracz;
-                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz);
+                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz, alpha, beta);
                             best = Math.max(best, score);
                             tab[i][j] = 0;
+                            alpha = Math.max(alpha, best);
+                            if (beta <= alpha) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -43,9 +47,13 @@ public class MiniMax {
                     for (int j = 0; j < 3; j++) {
                         if (tab[i][j] == 0) {
                             tab[i][j] = przeciwnik;
-                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz);
+                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz, alpha, beta);
                             best = Math.min(best, score);
                             tab[i][j] = 0;
+                            beta = Math.min(beta, best);
+                            if (beta <= alpha) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -80,9 +88,13 @@ public class MiniMax {
                 for (Map.Entry<Integer, Boolean> entry : indexToMove.entrySet()) {
                     if (entry.getValue() == true) {
                         Funkcje.przesun(tab, entry.getKey());
-                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz);
+                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz, alpha, beta);
                         bestGracz = Math.max(bestGracz, score);
                         Funkcje.cofnijPrzesuniecie(tab, entry.getKey());
+                        alpha = Math.max(alpha, bestGracz);
+                        if (beta <= alpha) {
+                            break;
+                        }
                     }
                 }
                 return bestGracz;
@@ -101,9 +113,13 @@ public class MiniMax {
                 for (Map.Entry<Integer, Boolean> entry : indexToMove.entrySet()) {
                     if (entry.getValue() == true) {
                         Funkcje.przesun(tab, entry.getKey());
-                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz);
+                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz, alpha, beta);
                         bestPrzeciwnik = Math.min(bestPrzeciwnik, score);
                         Funkcje.cofnijPrzesuniecie(tab, entry.getKey());
+                        beta = Math.min(beta, bestPrzeciwnik);
+                        if (beta <= alpha) {
+                            break;
+                        }
                     }
                 }
                 return bestPrzeciwnik;
@@ -157,7 +173,7 @@ public class MiniMax {
                 for (int i = 0; i < 3; i++) {
                     if (tab[n][i] == 0) {
                         tab[n][i] = gracz;
-                        int ruchWartosc = minimax(tab, 0, false, 1, gracz);
+                        int ruchWartosc = minimax(tab, 0, false, 1, gracz, -1000, 1000);
                         tab[n][i] = 0;
                         if (ruchWartosc > najWartosc) {
                             tabN = n;
@@ -178,7 +194,7 @@ public class MiniMax {
                 if (ruchy[ruch] == true) {
                     Funkcje.brakRuchow = false;
                     Funkcje.przesun(tab, ruch);
-                    int ruchWartosc = minimax(tab, 0, false, 2, gracz);
+                    int ruchWartosc = minimax(tab, 0, false, 2, gracz, -1000, 1000);
                     Funkcje.cofnijPrzesuniecie(tab, ruch);
                     if (ruchWartosc > najWartosc) {
                         najlepszy = ruch;

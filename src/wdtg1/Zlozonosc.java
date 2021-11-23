@@ -11,6 +11,7 @@ public class Zlozonosc {
     static double ZlozonoscMetoda1(int wersjaGry, boolean czyPokazac) {
         double wynik = Zlozonosc.graj(Funkcje.ilosc, wersjaGry);
         System.out.print("Zlozonosc gry (metoda1): ");
+        wynik = Funkcje.zaokraglenie(wynik);
         return wynik;
     }
 
@@ -19,6 +20,7 @@ public class Zlozonosc {
         double StosunekPoprawnychUstawien = Funkcje.SPU(Funkcje.ilosc, wersjaGry);
         double wynik = wszystkieMozliwosci * StosunekPoprawnychUstawien;
         System.out.print("Zlozonosc gry (metoda2): ");
+        wynik = Funkcje.zaokraglenie(wynik);
         return wynik;
     }
 
@@ -91,6 +93,8 @@ public class Zlozonosc {
         }
         parB /= Funkcje.ilosc;
         parD /= Funkcje.ilosc;
+        parB = Funkcje.zaokraglenie(parB);
+        parD = Funkcje.zaokraglenie(parD);
         System.out.println("gra Random:");
         System.out.println("parametr b: " + parB);
         System.out.println("parametr d: " + parD);
