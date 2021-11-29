@@ -70,8 +70,6 @@ public class MiniMax_VS_Random {
             //if (Funkcje.czyPokazac) {
             //    System.out.println("gry przegrane przez MiniMaxa: " + nrPrzegranejGry);
             //}
-        }
-        if (!czyAlphaBeta) {
             double sredniCzasWykonaniaRuchuMiniMax = (double) CzasWykonaniaRuchowMiniMax / (double) ileRuchowMiniMax;
             sredniCzasWykonaniaRuchuMiniMax = Funkcje.zaokraglenie(sredniCzasWykonaniaRuchuMiniMax);
             System.out.println("sredni czas wykonania ruchu przez MiniMax: " + sredniCzasWykonaniaRuchuMiniMax + " ms");

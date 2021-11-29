@@ -10,11 +10,19 @@ import static java.util.stream.Collectors.toList;
 public class MiniMax {
 
     static int glebia = 1000;
+    static long aktualnyCzas;
+    static long start = 0;
+    static long stop = 20000;
 
     static int minimax(int tab[][], int glebokosc, boolean czyMax, int faza, int gracz) {
+        long a = System.currentTimeMillis();
+        start += (a - aktualnyCzas);
         if (faza == 1) {
             int przeciwnik = gracz == 1 ? 2 : 1;
             int wartosc = funkcjaKosztu(tab, gracz);
+            if (start >= stop) {
+                return wartosc;
+            }
             if (wartosc == 10) {
                 return wartosc;
             }
@@ -30,7 +38,7 @@ public class MiniMax {
                     for (int j = 0; j < 3; j++) {
                         if (tab[i][j] == 0) {
                             tab[i][j] = gracz;
-                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz);
+                            int score = MiniMax.minimax(tab, glebokosc + 1, !czyMax, 1, gracz);
                             best = Math.max(best, score);
                             tab[i][j] = 0;
                         }
@@ -43,7 +51,7 @@ public class MiniMax {
                     for (int j = 0; j < 3; j++) {
                         if (tab[i][j] == 0) {
                             tab[i][j] = przeciwnik;
-                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz);
+                            int score = MiniMax.minimax(tab, glebokosc + 1, !czyMax, 1, gracz);
                             best = Math.min(best, score);
                             tab[i][j] = 0;
                         }
@@ -55,6 +63,9 @@ public class MiniMax {
             glebia--;
             int przeciwnik = gracz == 1 ? 2 : 1;
             int wartosc = funkcjaKosztu(tab, gracz);
+            if (start >= stop) {
+                return wartosc;
+            }
             if (wartosc == 10) {
                 return wartosc;
             }
@@ -80,7 +91,7 @@ public class MiniMax {
                 for (Map.Entry<Integer, Boolean> entry : indexToMove.entrySet()) {
                     if (entry.getValue() == true) {
                         Funkcje.przesun(tab, entry.getKey());
-                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz);
+                        int score = MiniMax.minimax(tab, glebokosc + 1, !czyMax, 2, gracz);
                         bestGracz = Math.max(bestGracz, score);
                         Funkcje.cofnijPrzesuniecie(tab, entry.getKey());
                     }
@@ -101,7 +112,7 @@ public class MiniMax {
                 for (Map.Entry<Integer, Boolean> entry : indexToMove.entrySet()) {
                     if (entry.getValue() == true) {
                         Funkcje.przesun(tab, entry.getKey());
-                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz);
+                        int score = MiniMax.minimax(tab, glebokosc + 1, !czyMax, 2, gracz);
                         bestPrzeciwnik = Math.min(bestPrzeciwnik, score);
                         Funkcje.cofnijPrzesuniecie(tab, entry.getKey());
                     }
@@ -150,6 +161,7 @@ public class MiniMax {
 
     static void wykonajNajlepszyRuch(int[][] tab, int faza, int gracz) {
         int najWartosc;
+        aktualnyCzas = System.currentTimeMillis();
         if (faza == 1) {
             najWartosc = -1000;
             int tabN = -1, tabI = -1;
@@ -157,7 +169,7 @@ public class MiniMax {
                 for (int i = 0; i < 3; i++) {
                     if (tab[n][i] == 0) {
                         tab[n][i] = gracz;
-                        int ruchWartosc = minimax(tab, 0, false, 1, gracz);
+                        int ruchWartosc = MiniMax.minimax(tab, 0, false, 1, gracz);
                         tab[n][i] = 0;
                         if (ruchWartosc > najWartosc) {
                             tabN = n;
@@ -168,6 +180,7 @@ public class MiniMax {
                 }
             }
             tab[tabN][tabI] = gracz;
+            start = 0;
         } else if (faza == 2) {
             najWartosc = -1000;
             int najlepszy = -1;
@@ -178,7 +191,7 @@ public class MiniMax {
                 if (ruchy[ruch] == true) {
                     Funkcje.brakRuchow = false;
                     Funkcje.przesun(tab, ruch);
-                    int ruchWartosc = minimax(tab, 0, false, 2, gracz);
+                    int ruchWartosc = MiniMax.minimax(tab, 0, false, 2, gracz);
                     Funkcje.cofnijPrzesuniecie(tab, ruch);
                     if (ruchWartosc > najWartosc) {
                         najlepszy = ruch;
@@ -190,6 +203,7 @@ public class MiniMax {
             for (int x = 0; x < 32; x++) {
                 ruchy[x] = false;
             }
+            start = 0;
         }
     }
 

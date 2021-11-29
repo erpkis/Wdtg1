@@ -14,14 +14,14 @@ public class AlphaBeta {
     static int minimax(int tab[][], int glebokosc, boolean czyMax, int faza, int gracz, int alpha, int beta) {
         if (faza == 1) {
             int przeciwnik = gracz == 1 ? 2 : 1;
-            int wartosc = funkcjaKosztu(tab, gracz);
+            int wartosc = MiniMax.funkcjaKosztu(tab, gracz);
             if (wartosc == 10) {
                 return wartosc;
             }
             if (wartosc == -10) {
                 return wartosc;
             }
-            if (czyKoniecPierwszejFazy(tab) == true) {
+            if (MiniMax.czyKoniecPierwszejFazy(tab) == true) {
                 return 0;
             }
             if (czyMax) {
@@ -30,7 +30,7 @@ public class AlphaBeta {
                     for (int j = 0; j < 3; j++) {
                         if (tab[i][j] == 0) {
                             tab[i][j] = gracz;
-                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz, alpha, beta);
+                            int score = AlphaBeta.minimax(tab, glebokosc + 1, !czyMax, 1, gracz, alpha, beta);
                             best = Math.max(best, score);
                             tab[i][j] = 0;
                             alpha = Math.max(alpha, best);
@@ -47,7 +47,7 @@ public class AlphaBeta {
                     for (int j = 0; j < 3; j++) {
                         if (tab[i][j] == 0) {
                             tab[i][j] = przeciwnik;
-                            int score = minimax(tab, glebokosc + 1, !czyMax, 1, gracz, alpha, beta);
+                            int score = AlphaBeta.minimax(tab, glebokosc + 1, !czyMax, 1, gracz, alpha, beta);
                             best = Math.min(best, score);
                             tab[i][j] = 0;
                             beta = Math.min(beta, best);
@@ -62,7 +62,7 @@ public class AlphaBeta {
         } else {
             glebia--;
             int przeciwnik = gracz == 1 ? 2 : 1;
-            int wartosc = funkcjaKosztu(tab, gracz);
+            int wartosc = MiniMax.funkcjaKosztu(tab, gracz);
             if (wartosc == 10) {
                 return wartosc;
             }
@@ -88,7 +88,7 @@ public class AlphaBeta {
                 for (Map.Entry<Integer, Boolean> entry : indexToMove.entrySet()) {
                     if (entry.getValue() == true) {
                         Funkcje.przesun(tab, entry.getKey());
-                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz, alpha, beta);
+                        int score = AlphaBeta.minimax(tab, glebokosc + 1, !czyMax, 2, gracz, alpha, beta);
                         bestGracz = Math.max(bestGracz, score);
                         Funkcje.cofnijPrzesuniecie(tab, entry.getKey());
                         alpha = Math.max(alpha, bestGracz);
@@ -113,7 +113,7 @@ public class AlphaBeta {
                 for (Map.Entry<Integer, Boolean> entry : indexToMove.entrySet()) {
                     if (entry.getValue() == true) {
                         Funkcje.przesun(tab, entry.getKey());
-                        int score = minimax(tab, glebokosc + 1, !czyMax, 2, gracz, alpha, beta);
+                        int score = AlphaBeta.minimax(tab, glebokosc + 1, !czyMax, 2, gracz, alpha, beta);
                         bestPrzeciwnik = Math.min(bestPrzeciwnik, score);
                         Funkcje.cofnijPrzesuniecie(tab, entry.getKey());
                         beta = Math.min(beta, bestPrzeciwnik);
@@ -127,43 +127,6 @@ public class AlphaBeta {
         }
     }
 
-    static int funkcjaKosztu(int t[][], int gracz) {
-        int przeciwnik = gracz == 1 ? 2 : 1;
-        for (int wiersz = 0; wiersz < 3; wiersz++) {
-            if (t[wiersz][0] == t[wiersz][1] && t[wiersz][1] == t[wiersz][2]) {
-                if (t[wiersz][0] == gracz) {
-                    return +10;
-                } else if (t[wiersz][0] == przeciwnik) {
-                    return -10;
-                }
-            }
-        }
-        for (int kolumna = 0; kolumna < 3; kolumna++) {
-            if (t[0][kolumna] == t[1][kolumna] && t[1][kolumna] == t[2][kolumna]) {
-                if (t[0][kolumna] == gracz) {
-                    return +10;
-                } else if (t[0][kolumna] == przeciwnik) {
-                    return -10;
-                }
-            }
-        }
-        if (t[0][0] == t[1][1] && t[1][1] == t[2][2]) {
-            if (t[0][0] == gracz) {
-                return +10;
-            } else if (t[0][0] == przeciwnik) {
-                return -10;
-            }
-        }
-        if (t[0][2] == t[1][1] && t[1][1] == t[2][0]) {
-            if (t[0][2] == gracz) {
-                return +10;
-            } else if (t[0][2] == przeciwnik) {
-                return -10;
-            }
-        }
-        return 0;
-    }
-
     static void wykonajNajlepszyRuch(int[][] tab, int faza, int gracz) {
         int najWartosc;
         if (faza == 1) {
@@ -173,7 +136,7 @@ public class AlphaBeta {
                 for (int i = 0; i < 3; i++) {
                     if (tab[n][i] == 0) {
                         tab[n][i] = gracz;
-                        int ruchWartosc = minimax(tab, 0, false, 1, gracz, -1000, 1000);
+                        int ruchWartosc = AlphaBeta.minimax(tab, 0, false, 1, gracz, -1000, 1000);
                         tab[n][i] = 0;
                         if (ruchWartosc > najWartosc) {
                             tabN = n;
@@ -194,7 +157,7 @@ public class AlphaBeta {
                 if (ruchy[ruch] == true) {
                     Funkcje.brakRuchow = false;
                     Funkcje.przesun(tab, ruch);
-                    int ruchWartosc = minimax(tab, 0, false, 2, gracz, -1000, 1000);
+                    int ruchWartosc = AlphaBeta.minimax(tab, 0, false, 2, gracz, -1000, 1000);
                     Funkcje.cofnijPrzesuniecie(tab, ruch);
                     if (ruchWartosc > najWartosc) {
                         najlepszy = ruch;
@@ -206,23 +169,6 @@ public class AlphaBeta {
             for (int x = 0; x < 32; x++) {
                 ruchy[x] = false;
             }
-        }
-    }
-
-    static boolean czyKoniecPierwszejFazy(int tab[][]) {
-        int wersjaGry = Wdtg1.opcja;
-        int ileWolnychPol = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (tab[i][j] == 0) {
-                    ileWolnychPol++;
-                }
-            }
-        }
-        if (ileWolnychPol == 8 - (wersjaGry * 2)) {
-            return true;
-        } else {
-            return false;
         }
     }
 }
