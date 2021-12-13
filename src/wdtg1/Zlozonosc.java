@@ -117,6 +117,7 @@ public class Zlozonosc {
         do {
             Random losujRuch = new Random();
             ruch = losujRuch.nextInt(32);
+            MonteCarloSearch.najlepszePrzesuniecie = ruch;
         } while (ruchy[ruch] == false && Funkcje.brakRuchow == false);
         Zlozonosc.sumujWszystkieMozliwosci += ileMozliwosci;
         if (Funkcje.brakRuchow == false) {

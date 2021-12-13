@@ -12,7 +12,7 @@ public class MiniMax {
     static int glebia = 1000;
     static long aktualnyCzas;
     static long start = 0;
-    static long stop = 20000;
+    static long stop = 10;
 
     static int minimax(int tab[][], int glebokosc, boolean czyMax, int faza, int gracz) {
         long a = System.currentTimeMillis();
@@ -20,9 +20,9 @@ public class MiniMax {
         if (faza == 1) {
             int przeciwnik = gracz == 1 ? 2 : 1;
             int wartosc = funkcjaKosztu(tab, gracz);
-            if (start >= stop) {
-                return wartosc;
-            }
+            //if (start >= stop) {
+            //    return wartosc;
+            //}
             if (wartosc == 10) {
                 return wartosc;
             }
@@ -63,9 +63,9 @@ public class MiniMax {
             glebia--;
             int przeciwnik = gracz == 1 ? 2 : 1;
             int wartosc = funkcjaKosztu(tab, gracz);
-            if (start >= stop) {
-                return wartosc;
-            }
+            //if (start >= stop) {
+            //    return wartosc;
+            //}
             if (wartosc == 10) {
                 return wartosc;
             }
