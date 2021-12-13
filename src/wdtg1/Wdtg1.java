@@ -1,5 +1,6 @@
 package wdtg1;                                                                  //link do opisu gry: https://www.boardgamegeek.com/boardgame/28931/achi
 
+import static java.lang.System.exit;
 import java.util.Scanner;
 
 public class Wdtg1 {
@@ -61,16 +62,22 @@ public class Wdtg1 {
         System.out.println("Prosze uzupelnic plansze pionkami graczy 1 i 2");
         System.out.println("Prosze podac ciag skladajacy sie z zer, jedynek\n"
                 + "lub dwojek oddzielonych spacjami, ktore reprezentowac beda\n"
-                + "polozenie pionkow na planszy - zostana one wczytane na plansze 3x3\n "
+                + "polozenie pionkow na planszy - zostana one wczytane na plansze 3x3\n"
                 + "uzupelniajac rzad od lewej do prawej a nastepnie przechodzac kolumne nizej");
         Scanner sc = new Scanner(System.in);
         String ustawienieNaPlanszy = sc.nextLine();
         int tab[][] = MonteCarloSearch.uzupelnianiePlanszy(ustawienieNaPlanszy);
+        if (Funkcje.czyWygrywa(tab, 1) || Funkcje.czyWygrywa(tab, 2)) {
+            System.out.println("W tej sytuacji jeden z graczy jest juz zwyciezca, koncze program");
+            exit(0);
+        }
+
         System.out.println("Wprowadzona plansza:");
         Funkcje.pokazPlansze(tab, true);
         System.out.println("Ktory gracz wykonuje Ruch? (1 lub 2):");
         int gracz = sc.nextInt();
         MonteCarloSearch.MonteCarlo(tab, 500, gracz, opcja);
+        System.out.println();
         System.out.println("Najlepszy ruch wg MonteCarloSearch: ");
         Funkcje.pokazPlansze(tab, true);
     }

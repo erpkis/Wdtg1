@@ -37,7 +37,7 @@ public class MonteCarloSearch {
                                 ruch = (ruch % 2) + 1;
                                 MonteCarloSearch.wykonajRuch(tab, ruch, 1);
                                 ilePustychPol--;
-                                Funkcje.pokazPlansze(tab, true);
+                                //Funkcje.pokazPlansze(tab, true);
                                 if (Funkcje.czyWygrywa(tab, czyjRuch)) {
                                     r++;
                                 }
@@ -46,7 +46,7 @@ public class MonteCarloSearch {
                                 do {
                                     ruch = (ruch % 2) + 1;
                                     MonteCarloSearch.wykonajRuch(tab, ruch, 2);
-                                    Funkcje.pokazPlansze(tab, true);
+                                    //Funkcje.pokazPlansze(tab, true);
                                     if (Funkcje.czyWygrywa(tab, czyjRuch)) {
                                         r++;
                                     }
@@ -70,8 +70,8 @@ public class MonteCarloSearch {
             }
             tab[najlepszeN][najlepszeI] = czyjRuch;
         } else {                                //faza2
-            int temp2[][] = new int[3][3];
             r = 0;
+            int temp2[][] = new int[3][3];
             for (int a = 0; a < 3; a++) {
                 for (int b = 0; b < 3; b++) {
                     temp[a][b] = tab[a][b];
@@ -104,9 +104,10 @@ public class MonteCarloSearch {
                 }
                 for (int a = 0; a < 3; a++) {
                     for (int b = 0; b < 3; b++) {
-                        temp[a][b] = tab[a][b];
+                        tab[a][b] = temp[a][b];
                     }
                 }
+                r = 0;
             }
             Funkcje.przesun(tab, najPrzesuniecie);
         }
@@ -127,7 +128,7 @@ public class MonteCarloSearch {
         }
     }
 
-    static void sprawdzPrzesuniecie(int tab[][], int gracz, int n) {
+    static void sprawdzPrzesuniecie(int tab[][], int gracz, int ruch) {
         Boolean ruchy[] = new Boolean[32];
         Funkcje.znajdzDostepneRuchy(tab, ruchy, gracz);
         Funkcje.brakRuchow = true;
@@ -136,15 +137,10 @@ public class MonteCarloSearch {
                 Funkcje.brakRuchow = false;
             }
         }
-        int ruch = 0;
-        do {
-            Random losujRuch = new Random();
-            ruch = losujRuch.nextInt(32);
-            MonteCarloSearch.najlepszePrzesuniecie = ruch;
-        } while (ruchy[ruch] == false && Funkcje.brakRuchow == false);
-        for (; n < 32; n++) {
-            if (ruchy[n] == true && Funkcje.brakRuchow == false) {
-                Funkcje.przesun(tab, n);
+        for (; ruch < 32; ruch++) {
+            if (ruchy[ruch] == true && Funkcje.brakRuchow == false) {
+                Funkcje.przesun(tab, ruch);
+                MonteCarloSearch.najlepszePrzesuniecie = ruch;
             }
         }
         for (int x = 0; x < 32; x++) {
