@@ -31,6 +31,7 @@ public class Wdtg1 {
                     break;
                 case 44:
                     Wdtg1.silnik2(4);
+                    break;
                 case 0:
                     System.out.println();
                     System.out.println("Do widzenia");

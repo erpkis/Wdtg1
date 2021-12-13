@@ -36,6 +36,8 @@ public class MonteCarloSearch {
                             do {
                                 ruch = (ruch % 2) + 1;
                                 MonteCarloSearch.wykonajRuch(tab, ruch, 1);
+                                ilePustychPol--;
+                                Funkcje.pokazPlansze(tab, true);
                                 if (Funkcje.czyWygrywa(tab, czyjRuch)) {
                                     r++;
                                 }
@@ -44,6 +46,7 @@ public class MonteCarloSearch {
                                 do {
                                     ruch = (ruch % 2) + 1;
                                     MonteCarloSearch.wykonajRuch(tab, ruch, 2);
+                                    Funkcje.pokazPlansze(tab, true);
                                     if (Funkcje.czyWygrywa(tab, czyjRuch)) {
                                         r++;
                                     }
